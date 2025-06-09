@@ -78,3 +78,36 @@
     - Listings
     - Comments
     - Bids
+
+---
+
+## How to run
+
+### Requirements
+
+- Python
+- Django
+
+#### Recomendation
+
+- Use python venv
+  - Linux
+```
+# In the project folder
+python -m venv .venv
+
+# Start the venv
+source .venv/bin/activate
+
+# Install package
+pip install django
+```
+
+### 1. Setup Django Migrations and Run
+
+- In the project folder
+```
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
