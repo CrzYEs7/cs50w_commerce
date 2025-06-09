@@ -1,4 +1,4 @@
-# 📋 Auction Site Specification
+# 📋 CS50W Project 2 - Commerce 
 
 ## ✅ Requirements
 
