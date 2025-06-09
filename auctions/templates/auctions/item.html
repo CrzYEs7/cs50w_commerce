@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h1> {{ item.title }} </h1>
+
+<img src={{ item.image_url }} width=600 height=600></br>
+
+<span> Starting bid: {{ item.start_bid }}$ </br></span>
+{% if item.current_bid %}
+ <span> Current bid: {{ item.current_bid.value }}$ </br></span>
+{% endif %}
+<span> Decription: {{ item.descripition }} </br></span>
+{% if not on_list %}
+<form action="{% url 'watchlist' item.id %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" value=item.id>
+    <button type="submit">Add to watchlist</button>
+</form>
+{% else %}
+<form action="{% url 'watchlist' item.id %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" value=item.id>
+    <button type="submit">Remove from watchlist</button>
+</form>
+{% endif %}
+<form action="{% url 'bid' item.id%}" method="post">
+    {% csrf_token %}
+    <input type="hidden" value=item.id>
+    <input name="amount" type="float">
+    <button>Make a bid</button>
+</form>
+{% if message %}
+<div> {{ message }}</div>
+{% endif %}
+{% if item.owner == request.user%}
+<form action="{% url 'item' item.id %}" method="post">
+{% csrf_token %}
+    <button>Remove this item</button>
+{% endif %}
+
+{% endblock %}

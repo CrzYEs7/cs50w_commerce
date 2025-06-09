@@ -1,0 +1,19 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<form action="{% url 'listing' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="Title">
+    <input type="text" name="description" placeholder="My item description">
+    <input type="float" name="value" placehoder="00.0">
+    <input type="url" name="image_url" placeholder="www.example.com/my_image.jpeg">
+    <select name="category_id">
+        {% for category in categories %}
+        <option value={{ category.id }}>{{ category }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Add">
+</form>
+
+{% endblock %}
