@@ -1,41 +1,85 @@
 {% extends "auctions/layout.html" %}
+    {% block body %}
 
-{% block body %}
-<h1> {{ item.title }} </h1>
+<div class="card mb-4 full-screen-card">
 
-<img src={{ item.image_url }} width=600 height=600></br>
+    <div class="img-wrapper">
+        <img src="{{ item.image_url }}" alt="{{ item.title }}" class="card-img-top" />
+    </div>
 
-<span> Starting bid: {{ item.start_bid }}$ </br></span>
-{% if item.current_bid %}
- <span> Current bid: {{ item.current_bid.value }}$ </br></span>
-{% endif %}
-<span> Decription: {{ item.descripition }} </br></span>
-{% if not on_list %}
-<form action="{% url 'watchlist' item.id %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" value=item.id>
-    <button type="submit">Add to watchlist</button>
-</form>
-{% else %}
-<form action="{% url 'watchlist' item.id %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" value=item.id>
-    <button type="submit">Remove from watchlist</button>
-</form>
-{% endif %}
-<form action="{% url 'bid' item.id%}" method="post">
-    {% csrf_token %}
-    <input type="hidden" value=item.id>
-    <input name="amount" type="float">
-    <button>Make a bid</button>
-</form>
-{% if message %}
-<div> {{ message }}</div>
-{% endif %}
-{% if item.owner == request.user%}
-<form action="{% url 'item' item.id %}" method="post">
-{% csrf_token %}
-    <button>Remove this item</button>
-{% endif %}
 
+    <div class="card-body">
+        <h1 class="card-title three-line-wrap">{{ item.title }}</h1>
+
+        <p class="card-text"><strong>Description:</strong> {{ item.description }}</p>
+        <p class="card-text"><strong>Starting bid:</strong> ${{ item.start_bid }}</p>
+
+        {% if item.current_bid %}
+        <p class="card-text"><strong>Current bid:</strong> ${{ item.current_bid.value }}</p>
+        {% endif %}
+
+        {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+        {% endif %}
+
+        {% if not on_list %}
+        {% if item.open %}
+        <form action="{% url 'watchlist' item.id %}" method="post" class="mb-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-primary">Add to Watchlist</button>
+        </form>
+        {% endif %}
+        {% else %}
+        <form action="{% url 'watchlist' item.id %}" method="post" class="mb-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-secondary">Remove from Watchlist</button>
+        </form>
+        {% endif %}
+
+        {% if item.open %}
+        <form action="{% url 'bid' item.id %}" method="post" class="form-inline mb-3">
+            {% csrf_token %}
+            <div class="form-group mr-2">
+                <label for="bidAmount" class="sr-only">Bid</label>
+                <input id="bidAmount" name="amount" type="number" step="0.01" class="form-control" placeholder="Your bid">
+            </div>
+            <button type="submit" class="btn btn-success">Make a Bid</button>
+        </form>
+        {% endif %}
+
+        {% if item.owner == request.user and item.open %}
+        <form action="{% url 'item' item.id %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger">Close Auction.</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+<div class="card" name="comments">
+    <div class="card-header">Comments</div>
+    <div class="card" ;name="new_comment">
+        <div class="card-header">Add comment</div>
+        <div class="card-body">
+            <form action="{% url 'comments' item.id %}" method="POST" class="needs-validation">
+                {% csrf_token %}
+                {% for field in comment_form %}
+                <div class="form-group">
+                    {{ field }}
+                </div>
+                {% endfor %}
+                <button class="btn btn-primary" type="submit">Add</button>
+            </form>
+        </div>
+    </div>
+    {% for comment in comments %}
+    <div class="card">
+        <div class="card-header">{{ comment.user.username }}</div>
+        <div class="card-body">
+            <p>{{ comment.comment }}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
 {% endblock %}
+
