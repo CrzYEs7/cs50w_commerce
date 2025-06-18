@@ -102,7 +102,7 @@ source .venv/bin/activate
 # Install package
 pip install django
 ```
-  - Windows ( In the terminal )
+  -- Windows ( In the terminal )
 ```
 # In the project folder
 python -m venv .venv
