@@ -91,13 +91,24 @@
 #### Recomendation
 
 - Use python venv
-  - Linux
+  - Linux ( In the terminal )
 ```
 # In the project folder
 python -m venv .venv
 
 # Start the venv
 source .venv/bin/activate
+
+# Install package
+pip install django
+```
+  - Windows ( In the terminal )
+```
+# In the project folder
+python -m venv .venv
+
+# Start the venv
+./.venv/Scripts/activate
 
 # Install package
 pip install django
